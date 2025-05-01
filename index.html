@@ -1,0 +1,572 @@
+  <!DOCTYPE html>
+  <html lang="fr">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Historiques Lina</title>
+  
+  <style>
+  
+    /* Généralisation du corps de la page */
+  body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Arial', sans-serif;
+    background-color: #000;
+    color: #cc0000;
+  }
+  
+  /* En-tête */
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #1a1a1a;
+    padding: 10px 20px;
+    border-bottom: 2px solid #cc0000;
+    border-radius: 8px;
+  }
+  
+  .status-left {
+    font-size: 14px;
+  }
+  
+  .main-title {
+    font-size: 24px;
+    font-weight: bold;
+    color: #cc0000;
+  }
+  
+  /* Mise en page principale avec deux colonnes */
+  .main-layout {
+    display: flex;
+    justify-content: flex-start;
+    gap: 20px;
+    padding: 20px;
+    flex-wrap: wrap;
+  }
+  
+  /* Colonne des boutons */
+  .button-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    width: 220px;
+    margin-right: 20px;
+  }
+  
+  .button-panel .button {
+    background-color: #1a1a1a;
+    border: 2px solid #cc0000;
+    color: #cc0000;
+    padding: 10px 15px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.2s, color 0.2s;
+  }
+  
+  .button-panel .button:hover {
+    background-color: #cc0000;
+    color: #000;
+  }
+  
+  /* Zone de texte à droite des boutons */
+  .chat-container {
+    flex: 1; /* Prend toute la place restante */
+    background-color: #1a1a1a;
+    border: 2px solid #cc0000;
+    padding: 20px;
+    border-radius: 8px;
+  }
+  
+  .chat-window {
+    background-color: #1a1a1a;
+    border: 1px solid #cc0000;
+    height: 300px;
+    padding: 10px;
+    margin-bottom: 20px;
+    overflow-y: auto;
+  }
+  
+  /* Popup Aperçu */
+  #preview-popup {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #1a1a1a;
+    border: 2px solid #cc0000;
+    padding: 20px;
+    border-radius: 8px;
+    z-index: 1000;
+    max-width: 600px;
+    width: 90%;
+  }
+  
+  .popup-content {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .popup-buttons {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+  }
+  
+  .popup-buttons .button {
+    flex: 1;
+    background-color: #cc0000;
+    color: #000;
+  }
+  
+  .popup {
+  display: none;
+}
+
+.popup.active {
+  display: block;
+}
+  
+  /* Boutons */
+  .button:hover {
+    background-color: #cc0000; /* rouge sombre */
+    color: #fff; /* texte blanc en hover */
+  }
+  
+  
+  .hidden {
+    display: none !important;
+  }
+  
+    .organisation { background-color: #1a1a40; color: #aaccff; padding: 10px; border-radius: 8px; margin-bottom: 10px; }
+    .sante { background-color: #402020; color: #ffaaaa; padding: 10px; border-radius: 8px; margin-bottom: 10px; }
+    .emotion { background-color: #202040; color: #aaffff; padding: 10px; border-radius: 8px; margin-bottom: 10px; }
+    .relation { background-color: #403020; color: #ffd799; padding: 10px; border-radius: 8px; margin-bottom: 10px; }
+    .repos { background-color: #203020; color: #caffca; padding: 10px; border-radius: 8px; margin-bottom: 10px; }
+    .meteo { background-color: #203040; color: #aadfff; padding: 10px; border-radius: 8px; margin-bottom: 10px; }
+    .travail { background-color: #303030; color: #eeeeee; padding: 10px; border-radius: 8px; margin-bottom: 10px; }
+    .chats { background-color: #303030; color: #e5f557; padding: 10px; border-radius: 8px; margin-bottom: 10px; }
+    .jeux { background-color: #303030; color: #2ed337; padding: 10px; border-radius: 8px; margin-bottom: 10px; }
+    .skynet { background-color: #303030; color: #f04e03; padding: 10px; border-radius: 8px; margin-bottom: 10px; }
+    .administration { background-color: #303030; color: #cdfd73; padding: 10px; border-radius: 8px; margin-bottom: 10px; }
+    .aveclina { background-color: #303030; color: #606af7; padding: 10px; border-radius: 8px; margin-bottom: 10px; }
+
+  </style>
+  
+  </head>
+  <body>
+    <div class="header">
+      <div class="status-left"><span>Vincent-Lina connectés</span></div>
+      <div class="main-title"><span>Historiques Lina</span></div>
+      <div class="settings-button"><button class="button" title="Paramètres">⚙️</button></div>
+    </div>
+  
+    <div class="main-layout">
+      <div class="button-panel">
+        <button class="button" onclick="window.location.href='file:///C:/Users/Nagas/Desktop/Skynet%20v0.03/dashboard/index.html'">Retour à Skynet</button>
+        <button class="button" id="select-file">Sélection fichier</button>
+        <button class="button" id="file-folder">Ajouter entrée</button>        
+        <button class="button" id="undo">Supprimer dernière entrée</button>
+        <button class="button" id="delete">Supprimer tout</button>
+        <button class="button" id="save-html">Sauvegarder</button>
+        <button class="button" id="sort">Publier URL</button>
+        <button class="button" id="export-archives">Reset URL</button>
+      </div>
+  
+      <div class="chat-container">
+        <h2 style="text-align: center;">Archives de la Conversation</h2>
+        <div style="display: flex; justify-content: center; margin: 10px 0;">
+          <span id="archive-date" style="color: #FF0000; font-weight: bold;">Aucune date</span>
+        </div>
+        <div class="chat-window">
+          <div class="chat-history" id="chat-archives">
+            <p id="loading-message">[Aucune archive chargée]</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  <script>
+  document.getElementById("loading-message")?.remove();
+  document.getElementById("delete").addEventListener("click", () => {
+  if (confirm("⚠️ Es-tu sûr de vouloir tout supprimer ?")) {
+    document.getElementById("chat-archives").innerHTML = '';
+  }
+});
+  </script>
+
+<!-- Popup Aperçu à ajouter -->
+<div id="preview-popup" class="popup">
+  <div class="popup-content">
+    <h2>Aperçu de la publication</h2>
+    <div id="preview-container" style="max-height: 300px; overflow-y: auto; margin-top: 10px;"></div>
+    <div class="popup-buttons">
+      <button class="button" id="confirm-export">✅ Envoyer</button>
+      <button class="button" id="cancel-export">❌ Annuler</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  
+  const publishHtmlBtn = document.getElementById('sort'); // Ton bouton "Publier HTML"
+  const previewPopup = document.getElementById('preview-popup');
+  const previewContainer = document.getElementById('preview-container');
+  const confirmExport = document.getElementById('confirm-export');
+  const cancelExport = document.getElementById('cancel-export');
+
+  publishHtmlBtn.addEventListener('click', () => {
+  const htmlContent = document.querySelector('.chat-history').innerHTML;
+  previewContainer.innerHTML = htmlContent;
+  previewPopup.classList.add('active'); // au lieu de .remove('hidden')
+});
+
+confirmExport.addEventListener('click', () => {
+  const htmlContent = document.querySelector('.chat-history').innerHTML;
+  publierSurGithub(htmlContent);
+  previewPopup.classList.remove('active');
+});
+
+cancelExport.addEventListener('click', () => {
+  previewPopup.classList.remove('active');
+});
+
+  function publierSurGithub(contenuHtml) {
+    console.log("🔧 Simulation d'envoi vers GitHub...");
+    // Ici ta logique d'export réelle
+  }
+</script>
+  
+    <input type="file" id="file-input" accept=".txt,.json,.html" style="display: none;">
+  
+    <script>
+     function applySemanticTags(content) {
+    return content
+      .replace(/\[organisation\](.*?)\[\/organisation\]/gs, '<section class="organisation"><h3>Organisation</h3>$1</section>')
+      .replace(/\[sante\](.*?)\[\/sante\]/gs, '<section class="sante"><h3>Santé</h3>$1</section>')
+      .replace(/\[emotion\](.*?)\[\/emotion\]/gs, '<section class="emotion"><h3>Émotion</h3>$1</section>')
+      .replace(/\[relation\](.*?)\[\/relation\]/gs, '<section class="relation"><h3>Relation</h3>$1</section>')
+      .replace(/\[repos\](.*?)\[\/repos\]/gs, '<section class="repos"><h3>Repos</h3>$1</section>')
+      .replace(/\[meteo\](.*?)\[\/meteo\]/gs, '<section class="meteo"><h3>Météo</h3>$1</section>')
+      .replace(/\[travail\](.*?)\[\/travail\]/gs, '<section class="travail"><h3>Travail</h3>$1</section>')
+      .replace(/\[chats\](.*?)\[\/chats\]/gs, '<section class="chats"><h3>Chats</h3>$1</section>')
+      .replace(/\[skynet\](.*?)\[\/skynet\]/gs, '<section class="skynet"><h3>Skynet</h3>$1</section>')
+      .replace(/\[jeux\](.*?)\[\/jeux\]/gs, '<section class="jeux"><h3>Jeux</h3>$1</section>')
+      .replace(/\[administration\](.*?)\[\/administration\]/gs, '<section class="administration"><h3>Administration</h3>$1</section>')
+      .replace(/\[aveclina\](.*?)\[\/aveclina\]/gs, '<section class="aveclina"><h3>Avec Lina</h3>$1</section>');
+  }
+  
+  
+
+
+  const fileInput = document.getElementById('file-input');
+  const selectFileBtn = document.getElementById('select-file');
+  const fileFolderBtn = document.getElementById('file-folder');
+  const chatArchives = document.getElementById('chat-archives');
+  const archiveDate = document.getElementById('archive-date');
+
+  selectFileBtn.addEventListener('click', () => {
+    fileInput.click();
+  });
+
+  fileInput.addEventListener('change', (event) => {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const content = e.target.result;
+      const taggedHtml = applySemanticTags(content);
+      chatArchives.innerHTML += taggedHtml;
+
+      const now = new Date();
+      const dateStr = now.toLocaleDateString("fr-FR") + ' ' + now.toLocaleTimeString("fr-FR");
+      archiveDate.textContent = dateStr;
+    };
+    reader.readAsText(file);
+  });
+
+  fileFolderBtn.addEventListener('click', () => {
+    fileInput.click(); // même comportement que "Sélection fichier"
+  });
+
+  document.getElementById("undo").addEventListener("click", () => {
+    const last = chatArchives.lastElementChild;
+    if (last) last.remove();
+  });
+
+  document.getElementById("save-html").addEventListener("click", () => {
+    const blob = new Blob(
+      [`<html><body>${chatArchives.innerHTML}</body></html>`],
+      { type: "text/html" }
+    );
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    const now = new Date();
+    const timestamp = now.toISOString().replace(/[-:.]/g, "").slice(0, 15);
+    a.href = url;
+    a.download = `archive_${timestamp}.html`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+  });
+  
+      document.getElementById("file-folder").addEventListener("click", () => {
+        const fileInput = document.createElement("input");
+        fileInput.type = "file";
+        fileInput.accept = ".txt";
+        fileInput.addEventListener("change", () => {
+          const file = fileInput.files[0];
+          if (file) {
+            const reader = new FileReader();
+            reader.onload = function (event) {
+              const cleanedContent = applySemanticTags(event.target.result.replace(/^\d+\s+/gm, '').trim());
+  const entry = document.createElement("div");
+  entry.classList.add("chat-entry");
+  entry.innerHTML = cleanedContent;
+  document.getElementById("chat-archives").appendChild(entry);
+  
+            };
+            reader.readAsText(file);
+          }
+        });
+        fileInput.click();
+      });
+  
+      document.getElementById("undo").addEventListener("click", () => {
+        const archives = document.getElementById("chat-archives");
+        const entries = archives.querySelectorAll(".chat-entry");
+        if (entries.length > 0) {
+          archives.removeChild(entries[entries.length - 1]);
+        }
+      });
+  
+      document.getElementById("delete").addEventListener("click", () => {
+        document.getElementById("chat-archives").innerHTML = '';
+      });
+  
+      document.getElementById("sort").addEventListener("click", () => {
+        const previewContainer = document.getElementById("preview-container");
+        previewContainer.innerHTML = document.getElementById("chat-archives").innerHTML;
+        document.getElementById("preview-popup").classList.remove("hidden");
+      });
+  
+      document.getElementById("cancel-export").addEventListener("click", () => {
+        document.getElementById("preview-popup").classList.add("hidden");
+      });
+    </script>
+      <script>
+  document.getElementById("confirm-export").addEventListener("click", async () => {
+  const token = prompt("Entre ton token GitHub personnel (ghp_...)");
+  if (!token) return alert("Token requis pour publier.");
+
+  const content = document.getElementById("chat-archives").innerHTML;
+
+  // Remplacement des balises personnalisées
+  const tags = ['emotion', 'sante', 'relation', 'repos', 'organisation', 'meteo', 'travail', 'chats', 'jeux', 'skynet', 'administration', 'aveclina'];
+  let chatHistory = content;
+  tags.forEach(tag => {
+    const openTag = new RegExp(`\\[${tag}\\]`, 'gi');
+    const closeTag = new RegExp(`\\[\\/${tag}\\]`, 'gi');
+    chatHistory = chatHistory.replace(openTag, `<div class="tag ${tag}">`);
+    chatHistory = chatHistory.replace(closeTag, `</div>`);
+  });
+
+  const style = `
+    <style>
+      body { background-color: #000; color: #f33; font-family: Arial, sans-serif; padding: 20px; }
+      p { margin-bottom: 1em; line-height: 1.5em; }
+      .tag { margin-top: 1em; padding-left: 10px; border-left: 2px solid #444; }
+      .emotion { color: #f9c; } .sante { color: #9cf; } .relation { color: #fc9; }
+      .repos { color: #cfc; } .organisation { color: #ccf; } .meteo { color: #cff; } .travail { color: #ff9; } .chats { color: #e5f557; }
+      .jeux { color:  #2ed337; } .skynet { color: #f04e03; } .administration { color: #cdfd73; } .aveclina { color: #606af7; }
+    </style>`;
+
+
+  const htmlContent = `
+    <!DOCTYPE html>
+    <html lang="fr">
+    <head><meta charset="UTF-8"><title>Archive</title>${style}</head>
+    <body><div>${chatHistory}</div></body>
+    </html>`;
+
+  const base64Content = btoa(unescape(encodeURIComponent(htmlContent)));
+
+  const repo = "SkynetLina";
+  const username = "nagashud";
+  const branch = "main";
+  const filePath = "index.html";
+  const getUrl = `https://api.github.com/repos/${username}/${repo}/contents/${filePath}`;
+  let sha = null;
+
+  try {
+    const response = await fetch(getUrl, {
+      headers: { Authorization: `token ${token}` }
+    });
+    if (response.ok) {
+      const data = await response.json();
+      sha = data.sha;
+    }
+  } catch (e) {
+    console.error("Erreur récupération SHA :", e);
+  }
+
+  const putResponse = await fetch(getUrl, {
+    method: "PUT",
+    headers: {
+      Authorization: `token ${token}`,
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      message: "Mise à jour auto via Skynet",
+      content: base64Content,
+      ...(sha && { sha }),
+      branch: branch
+    })
+  });
+
+  if (putResponse.ok) {
+    alert("✅ Publication réussie !");
+  } else {
+    const err = await putResponse.json();
+    console.error("Erreur GitHub :", err);
+    alert("❌ Échec de la publication : " + err.message);
+  }
+});
+
+// Prévisualisation
+document.getElementById("sort").addEventListener("click", () => {
+  const popup = document.getElementById("preview-popup");
+  const container = document.getElementById("preview-container");
+  const content = document.getElementById("chat-archives").innerHTML;
+  container.innerHTML = content;
+  popup.classList.remove("hidden");
+});
+
+// Fermer la popup
+document.getElementById("cancel-export").addEventListener("click", () => {
+  document.getElementById("preview-popup").classList.add("hidden");
+});
+// Ferme la popup sans rien faire
+document.getElementById("cancel-export").addEventListener("click", () => {
+  document.getElementById("preview-popup").classList.add("hidden");
+});
+
+// Logique pour envoyer/publication – ici on peut juste simuler un "envoi"
+document.getElementById("confirm-export").addEventListener("click", () => {
+  alert("Contenu publié (simulation).");
+  
+});
+
+</script>
+      </script>
+     <!-- POPUP -->
+<div id="publish-popup" style="display:none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
+background: white; padding: 20px; border: 2px solid #333; border-radius: 10px; z-index: 9999;">
+  <label for="github-token">GitHub Token :</label><br>
+  <input type="password" id="github-token" style="width: 100%; margin: 10px 0;"><br>
+  <button id="confirm-publish">Confirmer</button>
+  <button id="cancel-publish">Annuler</button>
+</div>
+
+
+<script>
+  document.getElementById("publish-button").addEventListener("click", function () {
+    document.getElementById("publish-popup").style.display = "block";
+  });
+  
+  document.getElementById("cancel-publish").addEventListener("click", function () {
+    document.getElementById("publish-popup").style.display = "none";
+  });
+  </script>
+      <script>
+document.getElementById("save-html").addEventListener("click", () => {
+  // Récupère le contenu HTML brut de l'élément à archiver
+  let chatHistory = document.getElementById("chat-archives").innerHTML;
+
+  // Liste des balises personnalisées à transformer
+  const tags = ['emotion', 'sante', 'relation', 'repos', 'organisation', 'meteo', 'travail', 'chats' , 'jeux' , 'skynet' , 'administration', 'aveclina' ];
+
+  // Remplace les balises personnalisées par des <div class="tag {nom}">
+  tags.forEach(tag => {
+    const openTag = new RegExp(`\\[${tag}\\]`, 'gi');
+    const closeTag = new RegExp(`\\[\\/${tag}\\]`, 'gi');
+    chatHistory = chatHistory.replace(openTag, `<div class="tag ${tag}">`);
+    chatHistory = chatHistory.replace(closeTag, `</div>`);
+  });
+
+  
+
+  // Feuille de style intégrée
+  const style = `
+    <style>
+      body {
+        background-color: #000;
+        color: #f33;
+        font-family: Arial, sans-serif;
+        padding: 20px;
+      }
+      p {
+        margin-bottom: 1em;
+        line-height: 1.5em;
+      }
+      .tag {
+        margin-top: 1em;
+        padding-left: 10px;
+        border-left: 2px solid #444;
+      }
+      .emotion { color: #f9c; }
+      .sante { color: #9cf; }
+      .relation { color: #fc9; }
+      .repos { color: #cfc; }
+      .organisation { color: #ccf; }
+      .meteo { color: #cff; }
+      .travail { color: #ff9; }
+      .chats { color: #e5f557; }
+      .jeux { color: #2ed337; }
+      .skynet { color: #f04e03; }
+       .administration { color: #cdfd73; }
+        .aveclina { color: #606af7; }
+    </style>
+  `;
+
+  // Construction du contenu HTML final
+  const htmlContent = `
+    <!DOCTYPE html>
+    <html lang="fr">
+    <head>
+      <meta charset="UTF-8">
+      <title>Archive</title>
+      ${style}
+    </head>
+    <body>
+      <div class="chat-history">
+        ${chatHistory}
+      </div>
+
+      <div id="publish-popup" style="display:none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
+background: white; padding: 20px; border: 2px solid #333; border-radius: 10px; z-index: 9999;">
+  <label for="github-token">GitHub Token :</label><br>
+  <input type="password" id="github-token" style="width: 100%; margin: 10px 0;"><br>
+  <button id="confirm-publish">Confirmer</button>
+  <button id="cancel-publish">Annuler</button>
+</div>
+
+
+    </body>
+    </html>
+  `;
+
+  // Création du blob et du téléchargement
+  const blob = new Blob([htmlContent], { type: "text/html" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "index.html";
+  a.click();
+  URL.revokeObjectURL(url);
+});
+</script>
