@@ -1,0 +1,91 @@
+
+    <!DOCTYPE html>
+    <html lang="fr">
+    <head>
+      <meta charset="UTF-8">
+      <title>Archive</title>
+      
+    <style>
+      body {
+        background-color: #000;
+        color: #f33;
+        font-family: Arial, sans-serif;
+        padding: 20px;
+      }
+      p {
+        margin-bottom: 1em;
+        line-height: 1.5em;
+      }
+      .tag {
+        margin-top: 1em;
+        padding-left: 10px;
+        border-left: 2px solid #444;
+      }
+      .emotion { color: #f9c; }
+      .sante { color: #9cf; }
+      .relation { color: #fc9; }
+      .repos { color: #cfc; }
+      .organisation { color: #ccf; }
+      .meteo { color: #cff; }
+      .travail { color: #ff9; }
+      .chats { color: #e5f557; }
+    </style>
+  
+    </head>
+    <body>
+      <div class="chat-history">
+        
+            
+          <p class="travail">
+<b>Bilan de la journée – 30 avril 2025</b>
+</p>
+
+<p class="organisation">
+<b>Tâches accomplies</b><br>
+– Réparation de deux tables à l’exploitation.<br>
+– Préparation des fraisiers pour le nettoyage prévu le lendemain.<br>
+– Avancée sur Skynet : définition d’une nouvelle fonctionnalité “Publier URL” avec popup sécurisé.<br>
+– Discussion sur l’allègement du fichier HTML (scripts à retirer). Objectif reporté.<br>
+<br>
+-Nouveaux objectifs définis :<br>
+<br>
+-Nettoyer le fichier historiques_lina.html.<br>
+-Ajouter une fonctionnalité “Publier URL” :<br>
+-Affiche un popup avec :<br>
+-Un champ GitHub Token.<br>
+-Deux boutons : Confirmer et Annuler.<br>
+-Si Annuler → le popup se ferme.<br>
+-Si Confirmer → le contenu .chat-history est extrait et utilisé pour générer un index.html.<br>
+-Ce fichier est ensuite poussé sur GitHub dans le repo SkynetLina, à la racine (remplace l’ancien).<br>
+</p>
+
+<p class="chats">
+<b>Chats</b><br>
+– Caramel et Lisa ont passé la journée à se reposer à cause de la chaleur ambiante.
+</p>
+
+<p class="relation">
+<b>Vie personnelle</b><br>
+– Rada viens chercher ses affaires aujourd’hui (01/05/2025) à 12h.
+</p>
+
+<p class="sante">
+<b>État d’esprit</b><br>
+– Fatigue prononcée ce soir, tu fonctionnes au ralenti, mais tu es resté concentré sur les priorités du jour.<br>
+– Objectif principal non atteint, mais tu termines avec un cap clair pour la suite.
+</p>
+
+      </div>
+
+      <div id="publish-popup" style="display:none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
+background: white; padding: 20px; border: 2px solid #333; border-radius: 10px; z-index: 9999;">
+  <label for="github-token">GitHub Token :</label><br>
+  <input type="password" id="github-token" style="width: 100%; margin: 10px 0;"><br>
+  <button id="confirm-publish">Confirmer</button>
+  <button id="cancel-publish">Annuler</button>
+</div>
+
+
+    </body>
+    </html>
+  
